@@ -15,7 +15,7 @@ const chapters = [
     number: "01",
     eyebrow: "Dopa Coffee & Cookies",
     title: "DOPA",
-    italic: "Coffee House",
+    italic: "Coffee & Cookies",
     copy: "Coffee with character, made for people who never order their day on autopilot.",
     note: "Amman, Jordan",
     background: "#efb94f",
