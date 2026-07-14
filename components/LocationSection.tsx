@@ -4,13 +4,16 @@ import { Clock3, Camera, MapPin, Navigation, Phone } from "lucide-react";
 import { SectionReveal } from "@/components/SectionReveal";
 import { useI18n } from "@/lib/i18n";
 
+const MAP_COORDINATES = "32.00978469848633,35.83256149291992";
+const DIRECTIONS_URL = `https://www.google.com/maps?q=${MAP_COORDINATES}&z=17&hl=en`;
+
 export function LocationSection() {
   const { isArabic, text } = useI18n();
   const contactItems = [
     { icon: MapPin, label: text.location.address, value: text.location.addressValue },
     { icon: Clock3, label: text.location.hours, value: text.location.hoursValue },
-    { icon: Phone, label: text.location.phone, value: "+962 7X XXX XXXX" },
-    { icon: Camera, label: text.location.social, value: "@dopacoffeehouse" },
+    { icon: Phone, label: text.location.phone, value: "+962 7 9512 2002" },
+    { icon: Camera, label: text.location.social, value: "@dopa.jor" },
   ];
 
   return (
@@ -53,7 +56,7 @@ export function LocationSection() {
             </div>
 
             <a
-              href="https://maps.google.com/?q=Amman%20Jordan"
+              href={DIRECTIONS_URL}
               target="_blank"
               rel="noreferrer"
               className="mt-10 inline-flex min-h-12 w-fit items-center gap-3 rounded-full bg-[#25150f] px-6 text-sm font-bold text-[#fffaf1] transition hover:-translate-y-0.5"
@@ -64,10 +67,9 @@ export function LocationSection() {
           </SectionReveal>
 
           <SectionReveal delay={0.08} className="map-frame min-h-[32rem] overflow-hidden rounded-lg border-8 border-[#25150f] bg-[#eadbc2] shadow-[22px_22px_0_#d8ad72]">
-            {/* Replace the iframe src below with Dopa Coffee House's final Google Maps embed URL. */}
             <iframe
               title={text.location.mapTitle}
-              src={`https://www.google.com/maps?q=Amman%20Jordan&z=13&output=embed${isArabic ? "&hl=ar" : ""}`}
+              src={`https://www.google.com/maps?q=${MAP_COORDINATES}&z=17&output=embed&hl=${isArabic ? "ar" : "en"}`}
               width="100%"
               height="100%"
               loading="lazy"

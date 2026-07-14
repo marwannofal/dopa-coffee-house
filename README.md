@@ -1,4 +1,4 @@
-# Dopa Coffee House
+# Dopa Coffee & Cookies
 
 A premium two-page coffee-house website built with Next.js, React, TypeScript, Tailwind CSS, Motion, GSAP ScrollTrigger, and Lucide icons.
 

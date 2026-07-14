@@ -35,7 +35,7 @@ export function Footer() {
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-[#d7b37b]">{text.footer.comeBy}</p>
             <p className="mt-6 text-sm leading-7 text-[#f7ead5]/65">
-              {text.footer.address}<br />{text.footer.hours}<br />+962 7X XXX XXXX
+              {text.footer.address}<br />{text.footer.hours}<br />+962 7 9512 2002
             </p>
             <div className="mt-6 flex gap-2">
               <a href="#" aria-label={text.footer.instagram} className="grid size-10 place-items-center rounded-full border border-white/12 hover:bg-white/8"><Camera size={17} /></a>
@@ -45,7 +45,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col gap-3 pt-7 text-xs text-[#f7ead5]/38 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Dopa Coffee House. {text.footer.rights}</p>
+          <p>© {new Date().getFullYear()} Dopa Coffee & Cookies. {text.footer.rights}</p>
           <p>{text.footer.note}</p>
         </div>
       </div>

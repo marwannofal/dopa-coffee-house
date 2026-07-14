@@ -9,7 +9,7 @@ import { Navbar } from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "Menu",
-  description: "Browse Dopa Coffee House drinks, food, desserts, and retail products.",
+  description: "Browse Dopa Coffee & Cookies drinks, food, desserts, and retail products.",
 };
 
 function MenuLoadingState() {

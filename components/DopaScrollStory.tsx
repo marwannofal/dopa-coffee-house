@@ -13,7 +13,7 @@ const chapters = [
   {
     id: "home",
     number: "01",
-    eyebrow: "Dopa Coffee House",
+    eyebrow: "Dopa Coffee & Cookies",
     title: "DOPA",
     italic: "Coffee House",
     copy: "Coffee with character, made for people who never order their day on autopilot.",

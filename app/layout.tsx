@@ -7,11 +7,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Dopa Coffee House",
-    template: "%s | Dopa Coffee House",
+    default: "Dopa Coffee & Cookies",
+    template: "%s | Dopa Coffee & Cookies",
   },
   description:
-    "Dopa Coffee House — thoughtful coffee, signature drinks, and a warm place to slow down.",
+    "Dopa Coffee & Cookies — thoughtful coffee, signature drinks, and a warm place to slow down.",
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { SlidersHorizontal, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { filterDefinitions } from "@/data/filtering";
 import { localizeFilterDefinition, localizeMenuValue } from "@/data/menu-ar";
 import { useI18n } from "@/lib/i18n";
@@ -97,10 +98,10 @@ export function MenuFilters(props: Props) {
         )}
       </button>
 
-      <AnimatePresence>
+      {typeof document !== "undefined" && createPortal(<AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 z-[90] bg-[#1b0f0a]/55 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-90 bg-[#1b0f0a]/55 backdrop-blur-sm lg:hidden"
             initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -134,7 +135,7 @@ export function MenuFilters(props: Props) {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>, document.body)}
     </>
   );
 }
