@@ -154,7 +154,7 @@ const chapters = [
     ghost: "COME BACK",
     drinkImage: "/images/story-drinks/house-latte-illustrated.png",
     image: "/images/lifestyle/coffee-house-interior.jpg",
-    imageAlt: "Dopa Coffee House interior",
+    imageAlt: "Dopa Coffee & Cookies interior",
     side: "right" as const,
     ar: {
       eyebrow: "طقوس دوبا",

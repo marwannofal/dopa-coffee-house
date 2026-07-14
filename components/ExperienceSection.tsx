@@ -26,7 +26,7 @@ export function ExperienceSection() {
         <SectionReveal className="relative min-h-[32rem] overflow-hidden rounded-[2.2rem] md:col-start-1">
           <Image
             src={assets.lifestyle}
-            alt="Warm Dopa Coffee House interior placeholder"
+            alt="Warm Dopa Coffee & Cookies interior placeholder"
             fill
             sizes="(max-width: 1024px) 100vw, 45vw"
             className="object-cover"
