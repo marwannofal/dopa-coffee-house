@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useSyncExternalStore,
+} from "react";
 
 export type Locale = "en" | "ar";
 
@@ -187,14 +194,103 @@ type I18nContextValue = {
 
 const I18nContext = createContext<I18nContextValue | null>(null);
 
-export function LocaleProvider({ children, initialLocale = "en" }: { children: React.ReactNode; initialLocale?: Locale }) {
-  const [locale, setLocale] = useState<Locale>(initialLocale);
+const LOCALE_STORAGE_KEY = "dopa-locale";
+const LOCALE_CHANGE_EVENT = "dopa-locale-change";
 
+function isLocale(value: string | null): value is Locale {
+  return value === "en" || value === "ar";
+}
+
+export function LocaleProvider({
+  children,
+  initialLocale = "en",
+}: {
+  children: React.ReactNode;
+  initialLocale?: Locale;
+}) {
+  /**
+   * Read the locale from localStorage in the browser.
+   */
+  const getSnapshot = useCallback((): Locale => {
+    const savedLocale = window.localStorage.getItem(LOCALE_STORAGE_KEY);
+
+    return isLocale(savedLocale) ? savedLocale : initialLocale;
+  }, [initialLocale]);
+
+  /**
+   * During static generation / SSR there is no localStorage.
+   *
+   * This also prevents hydration mismatch because the server
+   * and the first client render both start with initialLocale.
+   */
+  const getServerSnapshot = useCallback(
+    (): Locale => initialLocale,
+    [initialLocale],
+  );
+
+  /**
+   * Subscribe to locale changes.
+   *
+   * "storage" handles changes made from another browser tab.
+   * Our custom event handles changes made in this same tab.
+   */
+  const subscribe = useCallback((callback: () => void) => {
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === LOCALE_STORAGE_KEY) {
+        callback();
+      }
+    };
+
+    const handleLocaleChange = () => {
+      callback();
+    };
+
+    window.addEventListener("storage", handleStorage);
+    window.addEventListener(LOCALE_CHANGE_EVENT, handleLocaleChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener(LOCALE_CHANGE_EVENT, handleLocaleChange);
+    };
+  }, []);
+
+  const locale = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
+
+  /**
+   * Change the locale.
+   *
+   * localStorage is now the source of truth.
+   */
+  const setLocale = useCallback((newLocale: Locale) => {
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, newLocale);
+
+    window.dispatchEvent(
+      new Event(LOCALE_CHANGE_EVENT),
+    );
+  }, []);
+
+  const toggleLocale = useCallback(() => {
+    setLocale(locale === "en" ? "ar" : "en");
+  }, [locale, setLocale]);
+
+  /**
+   * Synchronize React locale with the document.
+   *
+   * This effect only updates external browser systems.
+   * No React state is changed here.
+   */
   useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
-    window.localStorage.setItem("dopa-locale", locale);
-    document.cookie = `dopa-locale=${locale}; path=/; max-age=31536000; samesite=lax`;
+
+    // Optional now that the site is fully static,
+    // but harmless if you want to keep the cookie.
+    document.cookie =
+      `dopa-locale=${locale}; path=/; max-age=31536000; samesite=lax`;
   }, [locale]);
 
   const value = useMemo<I18nContextValue>(
@@ -203,16 +299,24 @@ export function LocaleProvider({ children, initialLocale = "en" }: { children: R
       isArabic: locale === "ar",
       text: copy[locale],
       setLocale,
-      toggleLocale: () => setLocale((current) => (current === "en" ? "ar" : "en")),
+      toggleLocale,
     }),
-    [locale],
+    [locale, setLocale, toggleLocale],
   );
 
-  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
+  return (
+    <I18nContext.Provider value={value}>
+      {children}
+    </I18nContext.Provider>
+  );
 }
 
 export function useI18n() {
   const value = useContext(I18nContext);
-  if (!value) throw new Error("useI18n must be used inside LocaleProvider");
+
+  if (!value) {
+    throw new Error("useI18n must be used inside LocaleProvider");
+  }
+
   return value;
 }
