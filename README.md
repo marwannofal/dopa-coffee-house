@@ -1,18 +1,19 @@
 # Dopa Coffee & Cookies
 
-A premium two-page coffee-house website built with Next.js, React, TypeScript, Tailwind CSS, Motion, GSAP ScrollTrigger, and Lucide icons.
+A two-page, illustrated coffee-house website built with Next.js, React, TypeScript, Tailwind CSS, Anime.js 4, and Lucide icons.
 
 ## Included
 
-- Cinematic home page with a scroll-scrubbed coffee bottle scene
-- Responsive sticky navigation and animated mobile menu
-- Editorial brand sections, journey timeline, featured drinks, testimonials, location, and footer
+- Illustrated homepage with layered floating drinks, a moving banner, scroll reveals, and parallax artwork
+- Fixed navigation and an animated mobile dialog with focus trapping and Escape support
+- Featured drinks, the Dopa story, location, and oversized typographic footer
 - Menu page with 25 local sample products
 - Fully data-derived dependent filters
 - URL query parameter synchronization and refresh persistence
-- Responsive mobile filter drawer
-- Reduced-motion support and keyboard-accessible controls
-- Local placeholder assets with no external image dependency
+- Animated category selection, search, responsive product cards, expandable details, and pagination
+- English/Arabic content with right-to-left layouts
+- Reduced-motion support, a manual motion toggle, and keyboard-accessible controls
+- Local illustrated WebP assets and existing menu photography
 
 ## Run locally
 
@@ -30,17 +31,24 @@ For a production check:
 ```bash
 npm run lint
 npm run build
-npm run start
+python3 -m http.server 3000 --directory out
 ```
 
 ## Replace temporary content
 
-- Main bottle image: update `assets.bottle` in `data/assets.ts`.
+- Homepage content: edit `components/AnimeHome.tsx`.
+- Illustration sources live in `public/images/story-drinks/`; the active artwork uses optimized WebP copies.
 - Menu images: update the centralized paths in `data/assets.ts`.
 - Menu products: edit `data/menu.ts`.
-- Journey and testimonials: edit `data/journey.ts` and `data/testimonials.ts`.
+- Arabic menu translations: edit `data/menu-ar.ts`.
 - Google Maps embed: replace the iframe `src` in `components/LocationSection.tsx`.
-- Address, phone, social handles, and hours: update `components/LocationSection.tsx` and `components/Footer.tsx`.
+- Address and hours translations: edit `lib/i18n.tsx`; phone and social links live in `components/LocationSection.tsx` and `components/Footer.tsx`.
+
+## Animation ownership
+
+`lib/anime.ts` scopes homepage and menu animations to their component roots and reverts them on unmount. It also owns motion preferences. Mobile navigation and the menu category indicator clean up their own animations. Continuous artwork and banner animations pause outside the viewport. Native scrolling remains available throughout.
+
+The project exports static files to `out/`, so use a static server for the production preview. Earlier Motion/GSAP components remain in the repository but are not mounted by the active pages.
 
 ## Filtering behavior
 

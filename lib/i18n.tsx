@@ -1,9 +1,7 @@
 "use client";
 
 import {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useSyncExternalStore,
@@ -24,6 +22,7 @@ const copy = {
       mobileLinks: "Mobile navigation links",
       switchLanguage: "Switch to Arabic",
     },
+
     story: {
       label: "Dopa coffee story",
       chapters: "Story chapters",
@@ -33,6 +32,7 @@ const copy = {
       nextSection: "Continue to",
       backToTop: "Return to the first section",
     },
+
     location: {
       city: "AMMAN",
       eyebrow: "Visit Dopa",
@@ -48,8 +48,10 @@ const copy = {
       directions: "Get Directions",
       mapTitle: "Dopa Coffee & Cookies map location",
     },
+
     footer: {
-      statement: "Slow coffee, bright days, and a table worth returning to.",
+      statement:
+        "Slow coffee, bright days, and a table worth returning to.",
       explore: "Explore",
       location: "Location",
       comeBy: "Come by",
@@ -61,6 +63,7 @@ const copy = {
       instagram: "Dopa on Instagram",
       tiktok: "Dopa on TikTok",
     },
+
     menuHero: {
       home: "Home",
       eyebrow: "The full Dopa line-up",
@@ -70,6 +73,7 @@ const copy = {
       browse: "Browse everything",
       imageAlt: "Dopa pistachio latte from the menu",
     },
+
     menu: {
       order: "ORDER",
       results: "Live menu results",
@@ -92,11 +96,13 @@ const copy = {
       previous: "Previous menu page",
       next: "Next menu page",
       emptyTitle: "Nothing in this pour—yet.",
-      emptyCopy: "No Dopa favorites match those choices yet. Try removing one of the filters.",
+      emptyCopy:
+        "No Dopa favorites match those choices yet. Try removing one of the filters.",
       clearFilters: "Clear filters",
       itemSuffix: "menu item",
     },
   },
+
   ar: {
     nav: {
       home: "الرئيسية",
@@ -109,6 +115,7 @@ const copy = {
       mobileLinks: "روابط التنقل للجوال",
       switchLanguage: "التبديل إلى الإنجليزية",
     },
+
     story: {
       label: "حكاية قهوة دوبا",
       chapters: "فصول الحكاية",
@@ -118,6 +125,7 @@ const copy = {
       nextSection: "تابع إلى",
       backToTop: "العودة إلى القسم الأول",
     },
+
     location: {
       city: "عمّان",
       eyebrow: "زوروا دوبا",
@@ -133,8 +141,10 @@ const copy = {
       directions: "الاتجاهات",
       mapTitle: "موقع دوبا كوفي هاوس على الخريطة",
     },
+
     footer: {
-      statement: "قهوة على رواق، أيام أجمل، وطاولة تحبون العودة إليها.",
+      statement:
+        "قهوة على رواق، أيام أجمل، وطاولة تحبون العودة إليها.",
       explore: "استكشفوا",
       location: "الموقع",
       comeBy: "مرّوا علينا",
@@ -146,6 +156,7 @@ const copy = {
       instagram: "دوبا على إنستغرام",
       tiktok: "دوبا على تيك توك",
     },
+
     menuHero: {
       home: "الرئيسية",
       eyebrow: "تشكيلة دوبا الكاملة",
@@ -155,6 +166,7 @@ const copy = {
       browse: "تصفّحوا كل الأصناف",
       imageAlt: "بيستاشيو لاتيه من قائمة دوبا",
     },
+
     menu: {
       order: "اطلب",
       results: "نتائج القائمة",
@@ -177,22 +189,21 @@ const copy = {
       previous: "صفحة القائمة السابقة",
       next: "صفحة القائمة التالية",
       emptyTitle: "لا يوجد شيء في هذا الكوب بعد.",
-      emptyCopy: "لا توجد أصناف من دوبا تطابق هذه الخيارات. جرّبوا إزالة أحد الفلاتر.",
+      emptyCopy:
+        "لا توجد أصناف من دوبا تطابق هذه الخيارات. جرّبوا إزالة أحد الفلاتر.",
       clearFilters: "مسح الفلاتر",
       itemSuffix: "من قائمة دوبا",
     },
   },
 } as const;
 
-type I18nContextValue = {
-  locale: Locale;
-  isArabic: boolean;
-  text: (typeof copy)[Locale];
-  setLocale: (locale: Locale) => void;
-  toggleLocale: () => void;
-};
+/**
+ * ------------------------------------------------------------
+ * Locale store
+ * ------------------------------------------------------------
+ */
 
-const I18nContext = createContext<I18nContextValue | null>(null);
+const DEFAULT_LOCALE: Locale = "en";
 
 const LOCALE_STORAGE_KEY = "dopa-locale";
 const LOCALE_CHANGE_EVENT = "dopa-locale-change";
@@ -201,99 +212,231 @@ function isLocale(value: string | null): value is Locale {
   return value === "en" || value === "ar";
 }
 
+/**
+ * Client snapshot.
+ *
+ * This is only used AFTER a component has hydrated.
+ */
+function getLocaleSnapshot(): Locale {
+  if (typeof window === "undefined") {
+    return DEFAULT_LOCALE;
+  }
+
+  try {
+    const savedLocale =
+      window.localStorage.getItem(LOCALE_STORAGE_KEY);
+
+    return isLocale(savedLocale)
+      ? savedLocale
+      : DEFAULT_LOCALE;
+  } catch {
+    return DEFAULT_LOCALE;
+  }
+}
+
+/**
+ * CRITICAL:
+ *
+ * React uses this snapshot while hydrating server-rendered HTML.
+ *
+ * Because the server renders English, every component — including
+ * delayed Suspense boundaries — also sees English during its
+ * hydration pass.
+ *
+ * Once that individual component is hydrated, React switches it
+ * to getLocaleSnapshot().
+ */
+function getServerLocaleSnapshot(): Locale {
+  return DEFAULT_LOCALE;
+}
+
+/**
+ * Notify the current tab when we manually change the locale.
+ */
+function emitLocaleChange() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.dispatchEvent(
+    new Event(LOCALE_CHANGE_EVENT),
+  );
+}
+
+/**
+ * Subscribe to locale changes.
+ *
+ * storage:
+ *   Changes from another browser tab.
+ *
+ * dopa-locale-change:
+ *   Changes from this same browser tab.
+ */
+function subscribeToLocale(
+  callback: () => void,
+): () => void {
+  if (typeof window === "undefined") {
+    return () => {};
+  }
+
+  const handleStorage = (event: StorageEvent) => {
+    if (event.key === LOCALE_STORAGE_KEY) {
+      callback();
+    }
+  };
+
+  const handleLocaleChange = () => {
+    callback();
+  };
+
+  window.addEventListener(
+    "storage",
+    handleStorage,
+  );
+
+  window.addEventListener(
+    LOCALE_CHANGE_EVENT,
+    handleLocaleChange,
+  );
+
+  return () => {
+    window.removeEventListener(
+      "storage",
+      handleStorage,
+    );
+
+    window.removeEventListener(
+      LOCALE_CHANGE_EVENT,
+      handleLocaleChange,
+    );
+  };
+}
+
+/**
+ * Save a new locale.
+ */
+function saveLocale(newLocale: Locale) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(
+      LOCALE_STORAGE_KEY,
+      newLocale,
+    );
+  } catch {
+    // localStorage may be unavailable in some browser/privacy modes.
+  }
+
+  /**
+   * Update document immediately.
+   */
+  document.documentElement.lang = newLocale;
+
+  document.documentElement.dir =
+    newLocale === "ar" ? "rtl" : "ltr";
+
+  /**
+   * Keep cookie synchronized.
+   */
+  document.cookie =
+    `dopa-locale=${newLocale}; path=/; max-age=31536000; samesite=lax`;
+
+  /**
+   * Tell every useI18n() consumer in this tab to re-read the store.
+   */
+  emitLocaleChange();
+}
+
+/**
+ * ------------------------------------------------------------
+ * Provider
+ * ------------------------------------------------------------
+ *
+ * We intentionally DO NOT keep the locale in Provider React state.
+ *
+ * That's important because a Provider can hydrate before one of its
+ * Suspense children. If it changed from EN -> AR before that child
+ * hydrated, the child would receive AR while trying to hydrate
+ * server-rendered English HTML.
+ *
+ * Instead each useI18n() consumer subscribes directly to the external
+ * locale store and gets its own hydration-safe server snapshot.
+ */
 export function LocaleProvider({
   children,
-  initialLocale = "en",
 }: {
   children: React.ReactNode;
-  initialLocale?: Locale;
 }) {
-  /**
-   * Read the locale from localStorage in the browser.
-   */
-  const getSnapshot = useCallback((): Locale => {
-    const savedLocale = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-
-    return isLocale(savedLocale) ? savedLocale : initialLocale;
-  }, [initialLocale]);
-
-  /**
-   * During static generation / SSR there is no localStorage.
-   *
-   * This also prevents hydration mismatch because the server
-   * and the first client render both start with initialLocale.
-   */
-  const getServerSnapshot = useCallback(
-    (): Locale => initialLocale,
-    [initialLocale],
-  );
-
-  /**
-   * Subscribe to locale changes.
-   *
-   * "storage" handles changes made from another browser tab.
-   * Our custom event handles changes made in this same tab.
-   */
-  const subscribe = useCallback((callback: () => void) => {
-    const handleStorage = (event: StorageEvent) => {
-      if (event.key === LOCALE_STORAGE_KEY) {
-        callback();
-      }
-    };
-
-    const handleLocaleChange = () => {
-      callback();
-    };
-
-    window.addEventListener("storage", handleStorage);
-    window.addEventListener(LOCALE_CHANGE_EVENT, handleLocaleChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorage);
-      window.removeEventListener(LOCALE_CHANGE_EVENT, handleLocaleChange);
-    };
-  }, []);
-
   const locale = useSyncExternalStore(
-    subscribe,
-    getSnapshot,
-    getServerSnapshot,
+    subscribeToLocale,
+    getLocaleSnapshot,
+    getServerLocaleSnapshot,
   );
 
   /**
-   * Change the locale.
+   * Synchronize browser-level properties after locale changes.
    *
-   * localStorage is now the source of truth.
-   */
-  const setLocale = useCallback((newLocale: Locale) => {
-    window.localStorage.setItem(LOCALE_STORAGE_KEY, newLocale);
-
-    window.dispatchEvent(
-      new Event(LOCALE_CHANGE_EVENT),
-    );
-  }, []);
-
-  const toggleLocale = useCallback(() => {
-    setLocale(locale === "en" ? "ar" : "en");
-  }, [locale, setLocale]);
-
-  /**
-   * Synchronize React locale with the document.
-   *
-   * This effect only updates external browser systems.
-   * No React state is changed here.
+   * No React setState is performed here.
    */
   useEffect(() => {
     document.documentElement.lang = locale;
-    document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
 
-    // Optional now that the site is fully static,
-    // but harmless if you want to keep the cookie.
+    document.documentElement.dir =
+      locale === "ar" ? "rtl" : "ltr";
+
     document.cookie =
       `dopa-locale=${locale}; path=/; max-age=31536000; samesite=lax`;
   }, [locale]);
 
-  const value = useMemo<I18nContextValue>(
+  return <>{children}</>;
+}
+
+/**
+ * ------------------------------------------------------------
+ * useI18n
+ * ------------------------------------------------------------
+ *
+ * IMPORTANT:
+ *
+ * Every component gets its OWN useSyncExternalStore hydration
+ * snapshot.
+ *
+ * Therefore:
+ *
+ * Server:
+ *   EN
+ *
+ * MenuBrowser initial hydration:
+ *   EN
+ *
+ * After MenuBrowser successfully hydrates:
+ *   localStorage can switch it to AR
+ *
+ * This is what prevents the Suspense/selective-hydration mismatch.
+ */
+export function useI18n() {
+  const locale = useSyncExternalStore(
+    subscribeToLocale,
+    getLocaleSnapshot,
+    getServerLocaleSnapshot,
+  );
+
+  const setLocale = useCallback(
+    (newLocale: Locale) => {
+      saveLocale(newLocale);
+    },
+    [],
+  );
+
+  const toggleLocale = useCallback(() => {
+    saveLocale(
+      locale === "en" ? "ar" : "en",
+    );
+  }, [locale]);
+
+  return useMemo(
     () => ({
       locale,
       isArabic: locale === "ar",
@@ -301,22 +444,10 @@ export function LocaleProvider({
       setLocale,
       toggleLocale,
     }),
-    [locale, setLocale, toggleLocale],
+    [
+      locale,
+      setLocale,
+      toggleLocale,
+    ],
   );
-
-  return (
-    <I18nContext.Provider value={value}>
-      {children}
-    </I18nContext.Provider>
-  );
-}
-
-export function useI18n() {
-  const value = useContext(I18nContext);
-
-  if (!value) {
-    throw new Error("useI18n must be used inside LocaleProvider");
-  }
-
-  return value;
 }

@@ -1,26 +1,29 @@
 "use client";
 
-import { AnimatePresence } from "motion/react";
 import { EmptyMenuState } from "@/components/EmptyMenuState";
 import { MenuCard } from "@/components/MenuCard";
+import { useAnimeScene } from "@/lib/anime";
 import type { MenuItem } from "@/types/menu";
 
-export function MenuGrid({ items, onClear }: { items: MenuItem[]; onClear: () => void }) {
-  if (items.length === 0) {
-    return (
-      <div className="grid">
-        <EmptyMenuState onClear={onClear} />
-      </div>
-    );
-  }
-
+export function MenuGrid({
+  items,
+  onClear,
+}: {
+  items: MenuItem[];
+  onClear: () => void;
+}) {
+  const root = useAnimeScene<HTMLDivElement>(
+    items.map((item) => item.id).join(","),
+  );
   return (
-    <div className="relative z-10 bg-transparent">
-      <AnimatePresence mode="popLayout">
-        {items.map((item, index) => (
+    <div ref={root} className="menu-grid">
+      {items.length ? (
+        items.map((item, index) => (
           <MenuCard key={item.id} item={item} index={index} />
-        ))}
-      </AnimatePresence>
+        ))
+      ) : (
+        <EmptyMenuState onClear={onClear} />
+      )}
     </div>
   );
 }
