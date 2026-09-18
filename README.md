@@ -7,7 +7,7 @@ A two-page, illustrated coffee-house website built with Next.js, React, TypeScri
 - Illustrated homepage with layered floating drinks, a moving banner, scroll reveals, and parallax artwork
 - Fixed navigation and an animated mobile dialog with focus trapping and Escape support
 - Featured drinks, the Dopa story, location, and oversized typographic footer
-- Menu page with 25 local sample products
+- Menu page with 13 local sample products
 - Fully data-derived dependent filters
 - URL query parameter synchronization and refresh persistence
 - Animated category selection, search, responsive product cards, expandable details, and pagination

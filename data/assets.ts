@@ -8,12 +8,7 @@ export const assets = {
     coldBrew: "/images/menu/cold-brew.jpg",
     caramelLatte: "/images/menu/caramel-latte.jpg",
     matcha: "/images/menu/matcha.jpg",
-    tea: "/images/menu/tea.jpg",
-    refresher: "/images/menu/refresher.jpg",
     smoothie: "/images/menu/smoothie.jpg",
-    pastry: "/images/menu/pastry.jpg",
-    sandwich: "/images/menu/sandwich.jpg",
     dessert: "/images/menu/dessert.jpg",
-    retail: "/images/menu/retail.jpg",
   },
 } as const;

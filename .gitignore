@@ -5,3 +5,9 @@ out
 !.env.example
 .DS_Store
 *.log
+.venv-bg/
+.cache/background-removal/
+__pycache__/
+*.pyc
+*.bg-backup
+scripts/

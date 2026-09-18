@@ -26,14 +26,10 @@ const categories = [
   "",
   "Coffee",
   "Non-coffee",
-  "Tea",
-  "Refreshers",
   "Smoothies",
-  "Food",
   "Desserts",
-  "Retail products",
 ];
-const mainTypes = ["Desserts", "Food", "Retail products"];
+const mainTypes = ["Desserts"];
 
 function filtersFromParams(params: URLSearchParams): MenuFilterState {
   const candidate = { ...emptyFilters };

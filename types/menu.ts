@@ -17,7 +17,7 @@ export type MenuItem = {
   description: string;
   price: number;
   image: string;
-  mainType: "Drinks" | "Food" | "Desserts" | "Retail products";
+  mainType: "Drinks" | "Desserts";
   category: string;
   temperature: string[];
   flavor: string[];
