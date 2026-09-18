@@ -23,7 +23,7 @@ const chapters = [
     accent: "#fff5dc",
     ghost: "FIRST SIP",
     drinkImage: "/images/story-drinks/tiramisu-illustrated.png",
-    image: "/images/menu/spanish-latte.jpg",
+    image: "/images/menu/real/hot-spanish-latte.png",
     imageAlt: "Dopa Spanish latte",
     side: "left" as const,
     ar: {
@@ -49,7 +49,7 @@ const chapters = [
     accent: "#f5ead0",
     ghost: "UNHURRIED",
     drinkImage: "/images/story-drinks/spanish-latte-illustrated.png",
-    image: "/images/menu/spanish-latte.jpg",
+    image: "/images/menu/real/hot-spanish-latte.png",
     imageAlt: "Creamy Spanish latte",
     side: "right" as const,
     ar: {
@@ -75,7 +75,7 @@ const chapters = [
     accent: "#eff8f5",
     ghost: "STAY SHARP",
     drinkImage: "/images/story-drinks/cold-brew-illustrated.png",
-    image: "/images/menu/cold-brew.jpg",
+    image: "/images/menu/real/iced-specialty-v60.png",
     imageAlt: "Dopa cold brew",
     side: "left" as const,
     ar: {
@@ -101,7 +101,7 @@ const chapters = [
     accent: "#ffe8c9",
     ghost: "TREAT MODE",
     drinkImage: "/images/story-drinks/pistachio-latte-illustrated.png",
-    image: "/images/menu/pistachio-latte.jpg",
+    image: "/images/menu/real/iced-pistachio-latte.png",
     imageAlt: "Dopa pistachio latte",
     side: "right" as const,
     ar: {
@@ -127,7 +127,7 @@ const chapters = [
     accent: "#fff9d9",
     ghost: "CLEAR HEAD",
     drinkImage: "/images/story-drinks/matcha-illustrated.png",
-    image: "/images/menu/matcha.jpg",
+    image: "/images/menu/real/iced-matcha-latte.png",
     imageAlt: "Dopa matcha drink",
     side: "left" as const,
     ar: {

@@ -49,8 +49,12 @@ export function MenuHero() {
           <div className="menu-hero-drink">
             <div data-float>
               <DrinkArtwork
-                drink="matcha"
-                alt={isArabic ? "ماتشا لاتيه" : "Illustrated matcha latte"}
+                src="/images/hero/white-chocolate-hazelnut-frappe-cutout.png"
+                alt={
+                  isArabic
+                    ? "فرابيه الشوكولاتة البيضاء والبندق"
+                    : "White chocolate hazelnut frappe"
+                }
                 priority
               />
             </div>
@@ -58,8 +62,8 @@ export function MenuHero() {
           <div className="menu-hero-drink">
             <div data-float>
               <DrinkArtwork
-                drink="spanish-latte"
-                alt={isArabic ? "سبانش لاتيه" : "Illustrated Spanish latte"}
+                src="/images/menu/real/iced-vanilla-matcha.png"
+                alt={isArabic ? "ماتشا بالفانيلا مثلجة" : "Iced vanilla matcha"}
                 priority
               />
             </div>

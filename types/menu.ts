@@ -15,7 +15,7 @@ export type MenuItem = {
   name: string;
   slug: string;
   description: string;
-  price: number;
+  price: number | null;
   image: string;
   mainType: "Drinks" | "Desserts";
   category: string;

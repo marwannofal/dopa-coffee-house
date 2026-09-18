@@ -58,10 +58,12 @@ export function MenuCard({ item, index }: { item: MenuItem; index: number }) {
       <div className="menu-card-content">
         <div className="menu-card-title">
           <h2>{localized.name}</h2>
-          <span className="menu-price">
-            <b>{item.price.toFixed(2)}</b>
-            <small>{isArabic ? "د.أ" : "JD"}</small>
-          </span>
+          {item.price !== null && (
+            <span className="menu-price">
+              <b>{item.price.toFixed(2)}</b>
+              <small>{isArabic ? "د.أ" : "JD"}</small>
+            </span>
+          )}
         </div>
         <p>{localized.description}</p>
         <div className="item-tags">

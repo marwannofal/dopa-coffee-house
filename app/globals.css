@@ -947,7 +947,8 @@ h3 {
 .menu-art-word {
   position: absolute;
   top: 7%;
-  left: 0;
+  left: -16%;
+  z-index: 2;
   font-size: calc(120px * var(--heading-scale));
   font-weight: 700;
   font-family: var(--font-brand);
@@ -962,13 +963,13 @@ h3 {
   height: 96%;
   top: -5%;
   right: 0;
-  transform: rotate(13deg);
+  transform: rotate(13deg) scale(1.4);
 }
 .menu-hero-drink:nth-of-type(2) {
   left: 3%;
   right: auto;
   top: 10%;
-  transform: rotate(-14deg);
+  transform: rotate(-14deg) scale(1.8);
 }
 .menu-hero-drink > div {
   height: 100%;
@@ -1181,6 +1182,9 @@ h3 {
   border-radius: 5px;
   overflow: hidden;
   background: var(--warm-white);
+  height: 640px;
+  display: flex;
+  flex-direction: column;
   transition: box-shadow 0.25s;
 }
 .menu-card:hover {
@@ -1259,6 +1263,10 @@ h3 {
 }
 .menu-card-content {
   padding: 20px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 .menu-card-title {
   display: flex;
@@ -1271,6 +1279,11 @@ h3 {
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.04em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 .menu-price {
   display: grid;
@@ -1289,15 +1302,17 @@ h3 {
 .menu-card-content > p {
   color: var(--ink-muted);
   font-size: max(var(--text-min), calc(11px * var(--text-scale)));
-  line-height: 1.8;
-  margin-top: 14px;
-  min-height: 40px;
+  min-height: 3.25em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 .item-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  margin-top: 17px;
   min-height: 22px;
 }
 .item-tags > span {
@@ -1307,7 +1322,7 @@ h3 {
   font-size: max(var(--text-min), calc(9px * var(--text-scale)));
 }
 .item-details {
-  margin-top: 19px;
+  margin-top: auto;
   border-top: 1px solid color-mix(in srgb, var(--primary) 14.5%, transparent);
 }
 .item-details > summary {

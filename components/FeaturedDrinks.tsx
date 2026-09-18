@@ -60,7 +60,9 @@ export function FeaturedDrinks() {
                     <span className="text-[0.67rem] font-bold uppercase tracking-[0.14em] text-[#9c642f]">{item.category}</span>
                     <h3 className="mt-2 text-xl font-bold">{item.name}</h3>
                   </div>
-                  <span className="shrink-0 font-black">JD {item.price.toFixed(2)}</span>
+                  {item.price !== null && (
+                    <span className="shrink-0 font-black">JD {item.price.toFixed(2)}</span>
+                  )}
                 </div>
                 <p className="mt-3 line-clamp-2 text-sm leading-6 text-[#756256]">{item.description}</p>
                 <Link
