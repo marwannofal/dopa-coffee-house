@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { ArrowUpRight, Menu } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 import { BrandMark } from "@/components/BrandMark";
+import { BrandColorPicker } from "@/components/BrandColorPicker";
 import { MobileMenu } from "@/components/MobileMenu";
 import { useI18n } from "@/lib/i18n";
 
@@ -44,6 +45,7 @@ export function Navbar() {
             >
               {isArabic ? "EN" : "عربي"}
             </button>
+            <BrandColorPicker />
             <Link href="/#visit" className="nav-visit">
               {text.nav.visit}
               <ArrowUpRight size={16} />

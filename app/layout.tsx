@@ -2,9 +2,23 @@
 
 import type { Metadata } from "next";
 
+import { BackToFirstSection } from "@/components/BackToFirstSection";
+import { CoffeeWelcome } from "@/components/CoffeeWelcome";
+import { ThemedFavicon } from "@/components/ThemedFavicon";
+import { PRIMARY_COLOR_OPTIONS } from "@/lib/brand-colors";
 import { LocaleProvider } from "@/lib/i18n";
 
 import "./globals.css";
+
+const primaryColorScript = `
+  try {
+    const colors = ${JSON.stringify(PRIMARY_COLOR_OPTIONS.map((option) => option.value))};
+    const savedColor = localStorage.getItem("dopa-primary-color")?.toUpperCase();
+    if (colors.includes(savedColor)) {
+      document.documentElement.style.setProperty("--primary", savedColor);
+    }
+  } catch (_) {}
+`;
 
 export const metadata: Metadata = {
   title: {
@@ -14,10 +28,6 @@ export const metadata: Metadata = {
 
   description:
     "Dopa Coffee & Cookies — thoughtful coffee, signature drinks, and a warm place to slow down.",
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-  },
 };
 
 export default function RootLayout({
@@ -33,6 +43,8 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <ThemedFavicon />
+        <script dangerouslySetInnerHTML={{ __html: primaryColorScript }} />
         <link
           rel="preload"
           href="/fonts/voga-medium.woff2"
@@ -55,7 +67,13 @@ export default function RootLayout({
       </head>
 
       <body>
-        <LocaleProvider>{children}</LocaleProvider>
+        <LocaleProvider>
+          <div id="site-content">
+            {children}
+            <BackToFirstSection />
+          </div>
+          <CoffeeWelcome />
+        </LocaleProvider>
       </body>
     </html>
   );

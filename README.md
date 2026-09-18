@@ -48,7 +48,7 @@ python3 -m http.server 3000 --directory out
 
 `lib/anime.ts` scopes homepage and menu animations to their component roots and reverts them on unmount. It also owns motion preferences. Mobile navigation and the menu category indicator clean up their own animations. Continuous artwork and banner animations pause outside the viewport. Native scrolling remains available throughout.
 
-The project exports static files to `out/`, so use a static server for the production preview. Earlier Motion/GSAP components remain in the repository but are not mounted by the active pages.
+The project exports static files to `out/`, so use a static server for the production preview. Animations are implemented with Anime.js and respect the site motion preference.
 
 ## Filtering behavior
 

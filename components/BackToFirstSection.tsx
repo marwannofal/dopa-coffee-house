@@ -1,13 +1,13 @@
 "use client";
 
 import { ArrowUp } from "lucide-react";
-import { useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
+import { useMotionDisabled } from "@/lib/anime";
 import { useI18n } from "@/lib/i18n";
 import { slowScrollToId } from "@/lib/slow-scroll";
 
-export function BackToFirstSection({ targetId = "home" }: { targetId?: string }) {
-  const reduceMotion = useReducedMotion();
+export function BackToFirstSection({ targetId = "main-content" }: { targetId?: string }) {
+  const motionDisabled = useMotionDisabled();
   const { text } = useI18n();
   const [visible, setVisible] = useState(false);
 
@@ -21,13 +21,11 @@ export function BackToFirstSection({ targetId = "home" }: { targetId?: string })
   return (
     <button
       type="button"
-      onClick={() => slowScrollToId(targetId, Boolean(reduceMotion))}
+      onClick={() => slowScrollToId(targetId, motionDisabled)}
       aria-label={text.story.backToTop}
-      className={`fixed bottom-5 right-4 z-[70] grid size-12 place-items-center bg-transparent text-white mix-blend-difference transition duration-300 hover:-translate-y-1 focus-visible:opacity-100 sm:right-6 ${
-        visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"
-      }`}
+      className={`back-to-top ${visible ? "is-visible" : ""}`}
     >
-      <ArrowUp size={30} strokeWidth={2.6} />
+      <ArrowUp size={21} strokeWidth={2.4} />
     </button>
   );
 }
