@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight } from "lucide-react";
 import { CoffeeLoading } from "@/components/CoffeeLoading";
 import { useI18n } from "@/lib/i18n";
 
@@ -70,7 +71,7 @@ export function CoffeeWelcome() {
         setPhase("hidden");
       }}>
         {isArabic ? "تفضّل، فوت" : "Step inside"}
-        <span aria-hidden="true">↗</span>
+        <ArrowUpRight size={16} aria-hidden="true" focusable="false" />
       </button>
     </div>
   );
